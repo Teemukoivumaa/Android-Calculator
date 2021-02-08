@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TableLayout
+
+        android:id="@+id/tableLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow
+            android:layout_width="398dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp">
+
+            <Button
+                android:id="@+id/clearButton"
+                android:layout_height="70dp"
+                android:backgroundTint="#FF9800"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="specialMarkers"
+                android:text="C" />
+
+            <Button
+                android:id="@+id/eraseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#FF9800"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="specialMarkers"
+                android:text="Erase" />
+
+            <Button
+                android:id="@+id/presentageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#FF9800"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+
+                android:text="%" />
+
+            <Button
+                android:id="@+id/divisionButton"
+                android:layout_width="115dp"
+                android:layout_height="70dp"
+                android:backgroundTint="#FF9800"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+
+                android:text="÷" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="4dp">
+
+            <Button
+                android:id="@+id/num7Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="7" />
+
+            <Button
+                android:id="@+id/num8Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="8" />
+
+            <Button
+                android:id="@+id/num9Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="9" />
+
+            <Button
+                android:id="@+id/multiplyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#FF9800"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+
+                android:text="x" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="4dp">
+
+            <Button
+                android:id="@+id/num4Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="4" />
+
+            <Button
+                android:id="@+id/num5Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="5" />
+
+            <Button
+                android:id="@+id/num6Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="6" />
+
+            <Button
+                android:id="@+id/subtractionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#FF9800"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+
+                android:text="-" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="4dp">
+
+            <Button
+                android:id="@+id/num1Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/num2Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/num3Button"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="3" />
+
+            <Button
+                android:id="@+id/addButton"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#FF9800"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+
+                android:text="+" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/zeroButton"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:onClick="addNumber"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/decimalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#0E4571"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+
+                android:text="," />
+
+            <Button
+                android:id="@+id/equalsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:backgroundTint="#FF9800"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:text="=" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/calculation"
+        android:layout_width="391dp"
+        android:layout_height="53dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="monospace"
+        android:lineSpacingExtra="10sp"
+        android:text=""
+        android:textAlignment="textEnd"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:typeface="sans"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-thin"
+        android:lineSpacingExtra="3sp"
+        android:text="_______________________________"
+        android:textColor="#151515"
+        android:textSize="30sp"
+        android:typeface="normal"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

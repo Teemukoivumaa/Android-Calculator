@@ -49,7 +49,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-
+                android:onClick="specialMarkers"
                 android:text="%" />
 
             <Button
@@ -59,7 +59,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-
+                android:onClick="specialMarkers"
                 android:text="÷" />
 
         </TableRow>
@@ -106,7 +106,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-
+                android:onClick="specialMarkers"
                 android:text="x" />
         </TableRow>
 
@@ -152,7 +152,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-
+                android:onClick="specialMarkers"
                 android:text="-" />
         </TableRow>
 
@@ -198,7 +198,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-
+                android:onClick="specialMarkers"
                 android:text="+" />
         </TableRow>
 

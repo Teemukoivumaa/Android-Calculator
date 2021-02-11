@@ -229,8 +229,8 @@
                 android:backgroundTint="#0E4571"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-
-                android:text="," />
+                android:onClick="addNumber"
+                android:text="." />
 
             <Button
                 android:id="@+id/equalsButton"

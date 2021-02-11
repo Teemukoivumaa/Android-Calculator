@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "%":
                 if (!isPreviousMarkSpecial(calculation)) {
-                    newCalculation = presentageOf(calculation);
+                    newCalculation = percentageOf(calculation);
                     inputValues.setText(newCalculation);
                 }
                 break;
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             case "-":
             case "÷":
             case "x":
+            case ".":
                 if (isPreviousMarkSpecial(calculation)) {
                     calculation = removeLastChar(calculation);
                 }
@@ -68,22 +69,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String presentageOf(String calculation) {
-        float percent = 0;
+    private String percentageOf(String calculation) {
+        float percent;
         int stopLocation = 0;
-        StringBuilder precentageCalculation = new StringBuilder();
+         int lenght = calculation.length();
+        String newCalculation;
+        StringBuilder percentageCalculation = new StringBuilder();
 
-        for (int i = calculation.length() - 1; i >= 0; i--) {
+        Log.i("Calculation", calculation);
+        Log.i("Calculation lenght", String.valueOf(calculation.length()));
+
+        for (int i = lenght - 1; i >= 0; i--) {
             if (Character.isDigit(calculation.charAt(i))) {
                 Log.i("Numerot", String.valueOf(calculation.charAt(i)));
-                precentageCalculation.insert(0, calculation.charAt(i));
-            } else { stopLocation = i; i = 0; }
+                percentageCalculation.insert(0, calculation.charAt(i));
+            } else { stopLocation= i;  i = 0; }
         }
 
-        float nums = Integer.parseInt(String.valueOf(precentageCalculation));
+        float nums = Integer.parseInt(String.valueOf(percentageCalculation));
         percent = nums / 100;
 
-        String newCalculation = calculation.substring(0, calculation.length() - stopLocation) + percent;
+        if (stopLocation != 0) {
+            Log.i("Calculation", calculation);
+            newCalculation = calculation.substring(0, calculation.length() - percentageCalculation.length());
+            Log.i("New", newCalculation);
+            newCalculation = newCalculation + percent;
+        } else { newCalculation = String.valueOf(percent); }
 
         return newCalculation;
     }
@@ -91,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
     private Boolean isPreviousMarkSpecial(String calculation) {
         Boolean previousSpecial = false;
         String lastChar = calculation.substring(calculation.length() - 1);
-        Toast.makeText(MainActivity.this, lastChar, Toast.LENGTH_LONG).show();
         if (lastChar.equals("+") || lastChar.equals("-") || lastChar.equals("÷") || lastChar.equals("x")) {
             previousSpecial = true;
         }

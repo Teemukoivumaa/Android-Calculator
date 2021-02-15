@@ -32,9 +32,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         inputValues = findViewById(R.id.calculation);
         answer1 = findViewById(R.id.answer1);
+        // only answer1 is needed because we set it manually instead of for loop
     }
 
-    public void addNumber(View view) {
+    public void addNumber(View view) { // Adds the number that was pressed, could be added to specialMarkers() but it's simpler this way
         String valueText = inputValues.getText().toString();
 
         Button b = (Button)view;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         String buttonText = b.getText().toString();
 
         switch (buttonText) {
-            case "C":
+            case "C": // Clear calculation, if calculation is empty clear answers
                 newCalculation = "";
                 if (calculation.equals("")) {
                     for (int i=0; i<7; i++) {
@@ -61,77 +62,75 @@ public class MainActivity extends AppCompatActivity {
                 }
                 inputValues.setText(newCalculation);
                 break;
-            case "Erase":
+
+            case "Erase": // Erase the last mark in calculation
                 if (!calculation.isEmpty()) { newCalculation = removeLastChar(calculation); inputValues.setText(newCalculation); }
                 break;
-            case "%":
+
+            case "%": // percentage calculation
                 if (!isPreviousMarkSpecial(calculation)) {
                     newCalculation = percentageOf(calculation);
                     inputValues.setText(newCalculation);
                 }
                 break;
+
             case "=":
                 answer = "0";
                 swiftAnswers(answer, calculation);
                 inputValues.setText(answer);
                 break;
+
             case "+":
             case "-":
             case "÷":
             case "x":
             case ".":
                 if (isPreviousMarkSpecial(calculation)) {
+                    // If last mark is special replace it with the new one
                     calculation = removeLastChar(calculation);
-                }
+                } // else just add the button text to calculation
                 newCalculation = calculation + buttonText;
                 inputValues.setText(newCalculation);
                 break;
-            default:
+
+            default: // Default value, should never happen.
                 Toast.makeText(MainActivity.this, "Unknown value.", Toast.LENGTH_LONG).show();
         }
     }
 
-    private String percentageOf(String calculation) {
-        float percent;
+    private String percentageOf(String calculation) { // Calculate percentageOf X
         int stopLocation = 0;
         int length = calculation.length();
-        String newCalculation;
         StringBuilder percentageCalculation = new StringBuilder();
 
-        Log.i("Calculation", calculation);
-        Log.i("Calculation lenght", String.valueOf(calculation.length()));
-
-        for (int i = length - 1; i >= 0; i--) {
-            if (Character.isDigit(calculation.charAt(i))) {
-                Log.i("Numerot", String.valueOf(calculation.charAt(i)));
+        for (int i = length - 1; i >= 0; i--) { // Get the number we want to convert to percentage
+            if (Character.isDigit(calculation.charAt(i))) { // If char is a number add it to calculation
                 percentageCalculation.insert(0, calculation.charAt(i));
-            } else { stopLocation= i;  i = 0; }
+            } else { stopLocation = i;  i = 0; } // Else stop and mark the stop location
         }
 
-        float nums = Integer.parseInt(String.valueOf(percentageCalculation));
-        percent = nums / 100;
+        float number = Integer.parseInt(String.valueOf(percentageCalculation));
+        float percent = number / 100; // Parse to float and calculate percentage
+        String newCalculation;
 
-        if (stopLocation != 0) {
-            Log.i("Calculation", calculation);
+        if (stopLocation != 0) { // If stop location not 0, snip the end of calculation and add the percentage to it.
             newCalculation = calculation.substring(0, calculation.length() - percentageCalculation.length());
-            Log.i("New", newCalculation);
             newCalculation = newCalculation + percent;
-        } else { newCalculation = String.valueOf(percent); }
+        } else { newCalculation = String.valueOf(percent); } // If stop location is 0, just set the percentage to calculation.
 
         return newCalculation;
     }
 
-    private void swiftAnswers(String answer, String calculation) {
+    private void swiftAnswers(String answer, String calculation) { // Swifts answers up. Example: Answer1 = 22 so after next calculation Answer2 = 22
         for (int i=6; i>0; i--) {
             int nextValue = i-1;
             ((TextView) findViewById(answers[i])).setText(((TextView) findViewById(answers[nextValue])).getText());
         }
-
         answer1.setText(String.format("%s = %s", calculation, answer));
     }
 
-    private Boolean isPreviousMarkSpecial(String calculation) {
-        Boolean previousSpecial = false;
+    private boolean isPreviousMarkSpecial(String calculation) { // Checks if last mark is special
+        boolean previousSpecial = false;
         String lastChar = calculation.substring(calculation.length() - 1);
         if (lastChar.equals("+") || lastChar.equals("-") || lastChar.equals("÷") || lastChar.equals("x")) {
             previousSpecial = true;
@@ -143,12 +142,4 @@ public class MainActivity extends AppCompatActivity {
         return str.substring(0, str.length() - 1);
     }
 
-     /*
-        for (int i = 0; i < calculation.length(); i++) {
-            System.out.println(calculation.charAt(i));
-            if (Character.isLetter(calculation.charAt(i))) {
-                lastLetterLocation = i;
-            }
-        }
-        */
 }

@@ -14,13 +14,24 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private TextView inputValues;
-    private TextView outputValues;
+    private TextView answer1;
+
+    private final int[] answers = {
+            R.id.answer1,
+            R.id.answer2,
+            R.id.answer3,
+            R.id.answer4,
+            R.id.answer5,
+            R.id.answer6,
+            R.id.answer7
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         inputValues = findViewById(R.id.calculation);
+        answer1 = findViewById(R.id.answer1);
     }
 
     public void addNumber(View view) {
@@ -35,14 +46,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void specialMarkers(View view) {
         String calculation = inputValues.getText().toString();
-        String newCalculation = "";
+        String newCalculation, answer = "";
 
         Button b = (Button)view;
         String buttonText = b.getText().toString();
 
         switch (buttonText) {
             case "C":
-                newCalculation = ""; inputValues.setText(newCalculation);
+                newCalculation = "";
+                if (calculation.equals("")) {
+                    for (int i=0; i<7; i++) {
+                        ((TextView) findViewById(answers[i])).setText(newCalculation);
+                    }
+                }
+                inputValues.setText(newCalculation);
                 break;
             case "Erase":
                 if (!calculation.isEmpty()) { newCalculation = removeLastChar(calculation); inputValues.setText(newCalculation); }
@@ -52,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
                     newCalculation = percentageOf(calculation);
                     inputValues.setText(newCalculation);
                 }
+                break;
+            case "=":
+                answer = "0";
+                swiftAnswers(answer, calculation);
+                inputValues.setText(answer);
                 break;
             case "+":
             case "-":
@@ -72,14 +94,14 @@ public class MainActivity extends AppCompatActivity {
     private String percentageOf(String calculation) {
         float percent;
         int stopLocation = 0;
-         int lenght = calculation.length();
+        int length = calculation.length();
         String newCalculation;
         StringBuilder percentageCalculation = new StringBuilder();
 
         Log.i("Calculation", calculation);
         Log.i("Calculation lenght", String.valueOf(calculation.length()));
 
-        for (int i = lenght - 1; i >= 0; i--) {
+        for (int i = length - 1; i >= 0; i--) {
             if (Character.isDigit(calculation.charAt(i))) {
                 Log.i("Numerot", String.valueOf(calculation.charAt(i)));
                 percentageCalculation.insert(0, calculation.charAt(i));
@@ -97,6 +119,15 @@ public class MainActivity extends AppCompatActivity {
         } else { newCalculation = String.valueOf(percent); }
 
         return newCalculation;
+    }
+
+    private void swiftAnswers(String answer, String calculation) {
+        for (int i=6; i>0; i--) {
+            int nextValue = i-1;
+            ((TextView) findViewById(answers[i])).setText(((TextView) findViewById(answers[nextValue])).getText());
+        }
+
+        answer1.setText(String.format("%s = %s", calculation, answer));
     }
 
     private Boolean isPreviousMarkSpecial(String calculation) {

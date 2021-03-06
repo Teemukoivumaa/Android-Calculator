@@ -2,8 +2,10 @@ package com.example.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -68,14 +70,19 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case "%": // percentage calculation
-                if (!isPreviousMarkSpecial(calculation)) {
-                    newCalculation = percentageOf(calculation);
-                    inputValues.setText(newCalculation);
+                if (!calculation.isEmpty()) {
+                    if (!isLastMarkSpecial(calculation)) {
+                        newCalculation = percentageOf(calculation);
+                        inputValues.setText(newCalculation);
+                        break;
+                    }
                 }
+
+                makeToastMessage( "Calculation is empty.");
                 break;
 
             case "=":
-                answer = "0";
+                answer = mathCalculation(calculation);
                 swiftAnswers(answer, calculation);
                 inputValues.setText(answer);
                 break;
@@ -85,17 +92,40 @@ public class MainActivity extends AppCompatActivity {
             case "÷":
             case "x":
             case ".":
-                if (isPreviousMarkSpecial(calculation)) {
-                    // If last mark is special replace it with the new one
-                    calculation = removeLastChar(calculation);
-                } // else just add the button text to calculation
-                newCalculation = calculation + buttonText;
-                inputValues.setText(newCalculation);
+                if (!calculation.isEmpty()) {
+                    if (isLastMarkSpecial(calculation)) {
+                        // If last mark is special replace it with the new one
+                        calculation = removeLastChar(calculation);
+                    } // else just add the button text to calculation
+                    newCalculation = calculation + buttonText;
+                    inputValues.setText(newCalculation);
+                    break;
+                }
+                Log.i("toast", "Calc empty?");
+                makeToastMessage( "Calculation is empty.");
                 break;
 
             default: // Default value, should never happen.
-                Toast.makeText(MainActivity.this, "Unknown value.", Toast.LENGTH_LONG).show();
+                makeToastMessage( "Unknown value.");
         }
+    }
+
+    private String mathCalculation(String calculation) {
+        String answer = "0";
+        boolean isValid = checkCalculation(calculation);
+        if (isValid) {
+            Log.i("Calculation", "mathCalculation: Is valid");
+        }
+
+        return answer;
+    }
+
+    private boolean checkCalculation(String calculation) {
+        boolean isValid = false;
+
+
+
+        return isValid;
     }
 
     private String percentageOf(String calculation) { // Calculate percentageOf X
@@ -129,13 +159,24 @@ public class MainActivity extends AppCompatActivity {
         answer1.setText(String.format("%s = %s", calculation, answer));
     }
 
-    private boolean isPreviousMarkSpecial(String calculation) { // Checks if last mark is special
+    private boolean isLastMarkSpecial(String calculation) { // Checks if last mark is special
         boolean previousSpecial = false;
-        String lastChar = calculation.substring(calculation.length() - 1);
-        if (lastChar.equals("+") || lastChar.equals("-") || lastChar.equals("÷") || lastChar.equals("x")) {
-            previousSpecial = true;
+        Log.i("test", String.valueOf(calculation.length()));
+        if (!calculation.isEmpty()) {
+            Log.i("test", calculation);
+            String lastChar = calculation.substring(calculation.length() - 1);
+            if (lastChar.equals("+") || lastChar.equals("-") || lastChar.equals("÷") || lastChar.equals("x")) {
+                previousSpecial = true;
+            }
         }
+
         return previousSpecial;
+    }
+
+    public void makeToastMessage(String text) {
+        Log.i("Test", "Showing toast");
+        Toast toast = Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     private String removeLastChar(String str) {

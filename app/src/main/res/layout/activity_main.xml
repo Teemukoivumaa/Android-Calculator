@@ -229,7 +229,7 @@
                 android:backgroundTint="#0E4571"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="addNumber"
+                android:onClick="specialMarkers"
                 android:text="." />
 
             <Button

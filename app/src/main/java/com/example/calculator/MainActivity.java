@@ -2,10 +2,8 @@ package com.example.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private double prevValue, nextValue;
     private int prevValueLocation, nextValueLocation;
 
+    private List<String> operators;
+    private List<String> operatorLocations;
+
     private final int[] answers = {
             R.id.answer1,
             R.id.answer2,
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         inputValues = findViewById(R.id.calculation);
-        answer1 = findViewById(R.id.answer1); // only answer1 is needed because we set it manually instead of for loop
+        answer1 = findViewById(R.id.answer1); // Only answer1 is needed because we set it manually instead of for loop
     }
 
     public void addNumber(View view) { // Adds the number that was pressed, could be added to specialMarkers() but it's simpler this way
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         inputValues.setText(valueText);
     }
 
-    public void specialMarkers(View view) {
+    public void specialMarkers(View view) {  
         String calculation = inputValues.getText().toString();
         String newCalculation = "", answer = "";
 
@@ -132,62 +133,135 @@ public class MainActivity extends AppCompatActivity {
         if (!isLastMarkSpecial(calculation)) { isValid = true; }
 
         List<String> calculationList;
-        calculationList = new ArrayList<>();
-
-
+        calculationList = createListCalculation(calculation);
 
         if (isValid) {
             Log.i("Calculation", "mathCalculation: Is valid");
-            boolean calculating = true;
-            while (calculating) {
-                Log.i("Calculation", calculation);
+
+            while (true) { // while true still calculating
+                Log.i("Calculation", String.valueOf(calculationList));
                 double result = 0;
 
-                List<String> operators;
-                List<String> operatorLocations;
-                operators = new ArrayList<>();
-                operatorLocations = new ArrayList<>();
+                getOperators(calculationList);
 
-                for (int i=0; i < calculation.length(); i++) {
-                    String charAt = "" + calculation.charAt(i);
-                    boolean isNum = charAt.matches("\\d+(?:\\.\\d+)?");
-                    if (!isNum && !charAt.equals(".")) {
-                        operators.add(charAt);
-                        operatorLocations.add(String.valueOf(i));
-                    }
-                }
-
-                if (operators.isEmpty()) { answer = calculation; break;}
+                if (operators.isEmpty()) { answer = calculationList.get(0); break;} // when operators empty the calculation only contains answer
 
                 Log.i("Operators", String.valueOf(operators));
                 Log.i("OperatorsLocations", String.valueOf(operatorLocations));
 
                 String mult = "x"; String div = "÷"; String plus = "+"; String min = "-";
-
-                for (int i=0; i < operators.size(); i++) {
-                    String operator = operators.get(i);
-                    int operatorLocation = Integer.parseInt(operatorLocations.get(i));
-                    getLocations(calculation, operatorLocation);
-                    if (operator.equals(mult) || operator.equals(div)) {
-                        result = basicCalculations(nextValue, prevValue, operator);
-                        calculation = createNewCalculation(calculation, prevValueLocation, operatorLocation, nextValueLocation, result);
-                        break;
-                    } else if (operator.equals(plus) || operator.equals(min)) {
-                        result = basicCalculations(nextValue, prevValue, operator);
-                        calculation = createNewCalculation(calculation, prevValueLocation, operatorLocation, nextValueLocation, result);
-                        break;
-                    } else {
-                        Toast.makeText(MainActivity.this, "Something went wrong with the calculation.", Toast.LENGTH_LONG).show(); break;
+                if (operators.contains(mult) || operators.contains(div)) { // if operators contain mult or div operator
+                    for (int i=0; i < operators.size(); i++) {
+                        String operator = operators.get(i);
+                        int operatorLocation = Integer.parseInt(operatorLocations.get(i));
+                        getLocations(calculationList, operatorLocation);
+                        if (operator.equals(mult) || operator.equals(div)) { //
+                            calculationList = createNewCalculation(calculationList, prevValueLocation, operatorLocation, nextValueLocation, basicCalculations(prevValue, nextValue, operator));
+                            break;
+                        }
                     }
+                } else if (operators.contains(plus) || operators.contains(min)) { // if operators contain plus or min operator
+                    for (int i=0; i < operators.size(); i++) {
+                        String operator = operators.get(i);
+                        int operatorLocation = Integer.parseInt(operatorLocations.get(i));
+                        getLocations(calculationList, operatorLocation);
+                        if (operator.equals(plus) || operator.equals(min)) {
+                            calculationList = createNewCalculation(calculationList, prevValueLocation, operatorLocation, nextValueLocation, basicCalculations(prevValue, nextValue, operator));
+                            break;
+                        }
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Something went wrong with the calculation.", Toast.LENGTH_LONG).show(); break;
                 }
             }
         } else {
             Log.i("Calculation", "mathCalculation: Is not valid");
         }
-
         return answer;
     }
 
+    // --- For calculating --- //
+    private List<String> createListCalculation(String calculation) {
+        // Create new list that contains the calculation, makes calculation processing way much easier.
+        List<String> newCalculation;
+        newCalculation = new ArrayList<>();
+        String calculationPart = "";
+
+        for (int i=0; i<calculation.length(); i++) {
+            String charAt = ""+calculation.charAt(i);
+            boolean isNum = charAt.matches("\\d+(?:\\.\\d+)?");
+            if (!isNum) {
+                if (charAt.equals(".")) {
+                    calculationPart += charAt;
+                } else {
+                    newCalculation.add(calculationPart);
+                    calculationPart = "";
+                    newCalculation.add(charAt);
+                }
+            } else {
+                calculationPart += charAt;
+            }
+        }
+
+        newCalculation.add(calculationPart);
+        Log.i("Calculation list", String.valueOf(newCalculation));
+
+
+        return newCalculation;
+    }
+
+    private List<String> createNewCalculation(List<String> calculation, int prevValueLocation, int operatorLocation, int nextValueLocation, double result) {
+        // Create new calculation with previous calculations result
+        List <String> newCalculation;
+        newCalculation = new ArrayList<>();
+        for (int i=0; i < calculation.size(); i++) {
+            if (i == prevValueLocation) { // Add calculation result
+                newCalculation.add(String.valueOf(result));
+            } else if (i != operatorLocation && i != nextValueLocation) { // If we aren't on previous- or nextValue location add number/operator to newCalculation
+                newCalculation.add(calculation.get(i));
+            }
+        }
+
+        Log.i("new calc", "New calculation: " + newCalculation);
+        return newCalculation;
+    }
+
+    private double basicCalculations(double first, double second, String operator) { // do basic calculations
+        double resultValue = 0;
+        switch (operator) { // Calculate with different operators
+            case "+": resultValue = first + second; break;
+            case "-": resultValue = first - second; break;
+            case "x": resultValue = first * second; break;
+            case "÷": resultValue = first / second; break;
+        }
+        return resultValue;
+    }
+
+    private void getLocations(List<String> calculation, int operatorLocation) { // get prev and next value locations of x location
+        prevValueLocation = operatorLocation - 1;
+        nextValueLocation = operatorLocation + 1;
+
+        prevValue = Double.parseDouble(String.valueOf(calculation.get(prevValueLocation)));
+        nextValue = Double.parseDouble(String.valueOf(calculation.get(nextValueLocation)));
+    }
+
+    private void getOperators(List<String> calculation) { // gets the operators and their locations in list
+        operators = new ArrayList<>();
+        operatorLocations = new ArrayList<>();
+
+        for (int i=0; i < calculation.size(); i++) {
+            String calculationPart = calculation.get(i);
+            boolean isNum = calculationPart.matches("\\d+(?:\\.\\d+)?");
+            if (!isNum && !calculationPart.contains(".")) { // if part is not num or doesn't contain "." it's an operator
+                operators.add(calculationPart);
+                operatorLocations.add(String.valueOf(i));
+            }
+        }
+
+        return;
+    }
+
+    // --- Anything else --- //
     private String percentageOf(String calculation) { // Calculate percentageOf X
         int stopLocation = 0;
         int length = calculation.length();
@@ -211,39 +285,6 @@ public class MainActivity extends AppCompatActivity {
         return newCalculation;
     }
 
-    private String createNewCalculation(String calculation, int prevValueLocation, int operatorLocation, int nextValueLocation, double result) {
-        String newCalculation = "";
-        for (int i=0; i < calculation.length(); i++) {
-            if (i == prevValueLocation) { // Add calculation result
-                newCalculation += String.valueOf(result);
-            } else if (i != operatorLocation && i != nextValueLocation) { // If we aren't on previous- or nextValue location add number/operator to newCalculation
-                newCalculation += calculation.charAt(i);
-            }
-        }
-
-        Log.i("new calc", "New calculation: " + newCalculation);
-        return newCalculation;
-    }
-
-    private double basicCalculations(double first, double second, String operator) {
-        double resultValue = 0;
-        switch (operator) { // Calculate with different operators
-            case "+": resultValue = first + second; break;
-            case "-": resultValue = first - second; break;
-            case "x": resultValue = first * second; break;
-            case "÷": resultValue = first / second; break;
-        }
-        return resultValue;
-    }
-
-    private void getLocations(String calculation, int operatorLocation) {
-        prevValueLocation = operatorLocation - 1;
-        nextValueLocation = operatorLocation + 1;
-
-        prevValue = Double.parseDouble(String.valueOf(calculation.charAt(prevValueLocation)));
-        nextValue = Double.parseDouble(String.valueOf(calculation.charAt(nextValueLocation)));
-    }
-
     private void swiftAnswers(String answer, String calculation) { // Swifts answers up. Example: Answer1 = 22 so after next calculation Answer2 = 22
         for (int i=6; i>0; i--) {
             int nextValue = i-1;
@@ -265,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         return lastIsSpecial;
     }
 
-    private String removeLastChar(String str) {
+    private String removeLastChar(String str) { // removes the last char in the string
         return str.substring(0, str.length() - 1);
     }
 

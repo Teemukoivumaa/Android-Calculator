@@ -29,7 +29,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="specialMarkers"
+                android:onClick="addMarkers"
                 android:text="C" />
 
             <Button
@@ -39,7 +39,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="specialMarkers"
+                android:onClick="addMarkers"
                 android:text="Erase" />
 
             <Button
@@ -49,7 +49,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="specialMarkers"
+                android:onClick="addMarkers"
                 android:text="%" />
 
             <Button
@@ -59,7 +59,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="specialMarkers"
+                android:onClick="addMarkers"
                 android:text="÷" />
 
         </TableRow>
@@ -106,7 +106,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="specialMarkers"
+                android:onClick="addMarkers"
                 android:text="x" />
         </TableRow>
 
@@ -152,7 +152,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="specialMarkers"
+                android:onClick="addMarkers"
                 android:text="-" />
         </TableRow>
 
@@ -198,7 +198,7 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="specialMarkers"
+                android:onClick="addMarkers"
                 android:text="+" />
         </TableRow>
 
@@ -229,7 +229,7 @@
                 android:backgroundTint="#0E4571"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
-                android:onClick="addNumber"
+                android:onClick="addMarkers"
                 android:text="." />
 
             <Button
@@ -239,15 +239,16 @@
                 android:backgroundTint="#FF9800"
                 android:insetLeft="3dp"
                 android:insetRight="3dp"
+                android:onClick="addMarkers"
                 android:text="=" />
         </TableRow>
     </TableLayout>
 
     <TextView
         android:id="@+id/calculation"
-        android:layout_width="391dp"
-        android:layout_height="53dp"
-        android:layout_marginEnd="20dp"
+        android:layout_width="386dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="4dp"
         android:fontFamily="monospace"
         android:lineSpacingExtra="10sp"
@@ -258,12 +259,13 @@
         android:textSize="24sp"
         android:typeface="sans"
         app:layout_constraintBottom_toTopOf="@+id/tableLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer1" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="393dp"
+        android:layout_height="36dp"
         android:fontFamily="sans-serif-thin"
         android:lineSpacingExtra="3sp"
         android:text="_______________________________"
@@ -273,5 +275,75 @@
         app:layout_constraintBottom_toTopOf="@+id/tableLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/answer7"
+        android:layout_width="388dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:text=" "
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/answer6"
+        android:layout_width="388dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:text=" "
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer7" />
+
+    <TextView
+        android:id="@+id/answer5"
+        android:layout_width="388dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:text=" "
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer6" />
+
+    <TextView
+        android:id="@+id/answer4"
+        android:layout_width="388dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:text=" "
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer5" />
+
+    <TextView
+        android:id="@+id/answer3"
+        android:layout_width="388dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:text=" "
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer4" />
+
+    <TextView
+        android:id="@+id/answer2"
+        android:layout_width="388dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:text=" "
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer3" />
+
+    <TextView
+        android:id="@+id/answer1"
+        android:layout_width="388dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:text=" "
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

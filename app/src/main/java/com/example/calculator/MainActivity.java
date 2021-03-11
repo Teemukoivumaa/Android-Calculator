@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> operators;
     private List<String> operatorLocations;
 
-    private final int[] answers = {
+    private final int[] answers = { // Array of answers so we can swift up answers
             R.id.answer1,
             R.id.answer2,
             R.id.answer3,
@@ -44,16 +44,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addNumber(View view) { // Adds the number that was pressed, could be added to specialMarkers() but it's simpler this way
-        String valueText = inputValues.getText().toString();
+        String calculation = inputValues.getText().toString();
 
         Button b = (Button)view;
         String buttonText = b.getText().toString();
 
-        valueText = valueText + buttonText;
-        inputValues.setText(valueText);
+        calculation += buttonText;
+        inputValues.setText(calculation);
     }
 
-    public void specialMarkers(View view) {  
+    public void addMarkers(View view) { // Adds other marks than numbers
         String calculation = inputValues.getText().toString();
         String newCalculation = "", answer = "";
 
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         switch (buttonText) {
             case "C": // Clear calculation, if calculation is empty clear answers
                 newCalculation = "";
-                if (calculation.equals("")) {
+                if (calculation.equals("")) { // If calculation is empty clear history
                     for (int i=0; i<7; i++) {
                         ((TextView) findViewById(answers[i])).setText(newCalculation);
                     }
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
             case "=":
                 answer = mathCalculation(calculation);
-                if (!answer.equals("null")) {
+                if (!answer.equals("null")) { // If answer is not "null" set answer
                     swiftAnswers(answer, calculation);
                     inputValues.setText(answer);
                 }
@@ -100,8 +100,7 @@ public class MainActivity extends AppCompatActivity {
             case "÷":
             case "x":
                 if (!calculation.isEmpty()) {
-                    if (isLastMarkSpecial(calculation)) {
-                        // If last mark is special replace it with the new one
+                    if (isLastMarkSpecial(calculation)) { // If last mark is special replace it with the new one
                         calculation = removeLastChar(calculation);
                     } // else just add the button text to calculation
                     newCalculation = calculation + buttonText;
@@ -115,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             case ".":
                 newCalculation = calculation;
                 if (isLastMarkSpecial(calculation) || calculation.isEmpty()) {
+                    // if last mark is special marker or calculation is empty add zero so it's 0.x
                     newCalculation += "0";
                 }
                 newCalculation += buttonText;
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String mathCalculation(String calculation) {
+    private String mathCalculation(String calculation) { // Do calculation
         String answer = "null";
         boolean isValid = false;
 
@@ -140,9 +140,8 @@ public class MainActivity extends AppCompatActivity {
 
             while (true) { // while true still calculating
                 Log.i("Calculation", String.valueOf(calculationList));
-                double result = 0;
 
-                getOperators(calculationList);
+                getOperators(calculationList); // get's operators
 
                 if (operators.isEmpty()) { answer = calculationList.get(0); break;} // when operators empty the calculation only contains answer
 
@@ -153,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
                 if (operators.contains(mult) || operators.contains(div)) { // if operators contain mult or div operator
                     for (int i=0; i < operators.size(); i++) {
                         String operator = operators.get(i);
-                        int operatorLocation = Integer.parseInt(operatorLocations.get(i));
-                        getLocations(calculationList, operatorLocation);
-                        if (operator.equals(mult) || operator.equals(div)) { //
+                        if (operator.equals(mult) || operator.equals(div)) { // when operator is mult or div
+                            int operatorLocation = Integer.parseInt(operatorLocations.get(i));
+                            getLocations(calculationList, operatorLocation); // get prev- & nextValueLocation and also prev- & nextValue
                             calculationList = createNewCalculation(calculationList, prevValueLocation, operatorLocation, nextValueLocation, basicCalculations(prevValue, nextValue, operator));
                             break;
                         }
@@ -163,18 +162,18 @@ public class MainActivity extends AppCompatActivity {
                 } else if (operators.contains(plus) || operators.contains(min)) { // if operators contain plus or min operator
                     for (int i=0; i < operators.size(); i++) {
                         String operator = operators.get(i);
-                        int operatorLocation = Integer.parseInt(operatorLocations.get(i));
-                        getLocations(calculationList, operatorLocation);
-                        if (operator.equals(plus) || operator.equals(min)) {
+                        if (operator.equals(plus) || operator.equals(min)) { // when operator is plus or min
+                            int operatorLocation = Integer.parseInt(operatorLocations.get(i));
+                            getLocations(calculationList, operatorLocation); // get prev- & nextValueLocation and also prev- & nextValue
                             calculationList = createNewCalculation(calculationList, prevValueLocation, operatorLocation, nextValueLocation, basicCalculations(prevValue, nextValue, operator));
                             break;
                         }
                     }
-                } else {
+                } else { // if operators don't contain any operators then something is wrong with the calculation
                     Toast.makeText(MainActivity.this, "Something went wrong with the calculation.", Toast.LENGTH_LONG).show(); break;
                 }
             }
-        } else {
+        } else { // Not valid calculation
             Log.i("Calculation", "mathCalculation: Is not valid");
         }
         return answer;
@@ -185,27 +184,26 @@ public class MainActivity extends AppCompatActivity {
         // Create new list that contains the calculation, makes calculation processing way much easier.
         List<String> newCalculation;
         newCalculation = new ArrayList<>();
-        String calculationPart = "";
+        StringBuilder calculationPart = new StringBuilder();
 
         for (int i=0; i<calculation.length(); i++) {
             String charAt = ""+calculation.charAt(i);
             boolean isNum = charAt.matches("\\d+(?:\\.\\d+)?");
             if (!isNum) {
-                if (charAt.equals(".")) {
-                    calculationPart += charAt;
-                } else {
-                    newCalculation.add(calculationPart);
-                    calculationPart = "";
+                if (charAt.equals(".")) { // if char is "." add it to calculation part
+                    calculationPart.append(charAt);
+                } else { // else add calculation part to list and add char also
+                    newCalculation.add(calculationPart.toString());
+                    calculationPart = new StringBuilder();
                     newCalculation.add(charAt);
                 }
-            } else {
-                calculationPart += charAt;
+            } else { // char is num so add it to calculation part
+                calculationPart.append(charAt);
             }
         }
 
-        newCalculation.add(calculationPart);
+        newCalculation.add(calculationPart.toString()); // add last part
         Log.i("Calculation list", String.valueOf(newCalculation));
-
 
         return newCalculation;
     }
@@ -226,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         return newCalculation;
     }
 
-    private double basicCalculations(double first, double second, String operator) { // do basic calculations
+    private double basicCalculations(double first, double second, String operator) { // Do basic calculations
         double resultValue = 0;
         switch (operator) { // Calculate with different operators
             case "+": resultValue = first + second; break;
@@ -237,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
         return resultValue;
     }
 
-    private void getLocations(List<String> calculation, int operatorLocation) { // get prev and next value locations of x location
+    private void getLocations(List<String> calculation, int operatorLocation) { // Get prev and next value locations of x location
         prevValueLocation = operatorLocation - 1;
         nextValueLocation = operatorLocation + 1;
 
@@ -245,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         nextValue = Double.parseDouble(String.valueOf(calculation.get(nextValueLocation)));
     }
 
-    private void getOperators(List<String> calculation) { // gets the operators and their locations in list
+    private void getOperators(List<String> calculation) { // Gets the operators and their locations in list
         operators = new ArrayList<>();
         operatorLocations = new ArrayList<>();
 
@@ -257,8 +255,6 @@ public class MainActivity extends AppCompatActivity {
                 operatorLocations.add(String.valueOf(i));
             }
         }
-
-        return;
     }
 
     // --- Anything else --- //
@@ -279,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (stopLocation != 0) { // If stop location not 0, snip the end of calculation and add the percentage to it.
             newCalculation = calculation.substring(0, calculation.length() - percentageCalculation.length());
-            newCalculation = newCalculation + percent;
+            newCalculation += percent;
         } else { newCalculation = String.valueOf(percent); } // If stop location is 0, just set the percentage to calculation.
 
         return newCalculation;
@@ -306,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
         return lastIsSpecial;
     }
 
-    private String removeLastChar(String str) { // removes the last char in the string
+    private String removeLastChar(String str) { // Removes the last char in the string
         return str.substring(0, str.length() - 1);
     }
 
